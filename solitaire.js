@@ -99,9 +99,19 @@ let mouseDown = false;
 let startX, startY;
 let sX, sY;
 let tempEvent;
-
+let moves = 0;
+const addMove = _ =>{
+    moves++;
+    document.querySelector('#move').innerHTML = 'Moves : ' + moves;
+}
 document.body.addEventListener('mousedown', e => {
+    if(e.target.parentNode != document.querySelector('#table')){
+        if(e.target != e.target.parentNode.lastChild){
+            return;
+        }
+    }
     mouseDown = true;
+
     if (e.target.className === 'card' && e.target.dataset['front'] == 'true') {
         tempEvent = e;
         startX = e.clientX;
@@ -133,6 +143,7 @@ document.body.addEventListener('mouseup', e => {
                         clickedCard.style.top = '-2px';
                         sorts[i].appendChild(clickedCard);
                         organize(tempParent.dataset['index']);
+                        addMove();
                         return;
                     }
                 }
@@ -173,6 +184,7 @@ document.body.addEventListener('mouseup', e => {
                 }
                 organize(index);
                 organize(i);
+                addMove();
                 return;
             }
         }
@@ -184,6 +196,7 @@ document.body.addEventListener('mouseup', e => {
                 clickedCard.parentNode.children[i].style.left = '-2.5px';
             }
             organize(Number(clickedCard.parentNode.dataset['index']));
+            addMove();
         }
     }
 
@@ -229,15 +242,9 @@ document.querySelector('.queueBack').addEventListener('mouseup', e => {
         }
         return;
     }
-    target.style.left = '-3px';
+    addMove();
     document.querySelector('.queueFront').appendChild(target);
     flip(target, true);
-})
-document.querySelector('.queueFront').addEventListener('mousedown', e=>{
-    if(e.target != document.querySelectorAll('.queueFront div').lastChild){
-        clickedCard = null;
-        mouseDown = false;
-    }
 })
 
 window.onload = _ => {

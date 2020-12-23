@@ -17,6 +17,13 @@ html, body{
     height:100%;
 }
 
+#move{
+    position: absolute;
+    top:5px;
+    right:20px;
+    color:white;
+}
+
 .card{
     position: absolute;
     box-sizing: border-box;
