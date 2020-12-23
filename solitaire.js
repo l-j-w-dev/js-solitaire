@@ -135,7 +135,7 @@ document.body.addEventListener('mousedown', e => {
 document.body.addEventListener('mouseup', e => {
     mouseDown = false;
     tempEvent = null;
-    if(e.target.className == ''){
+    if (e.target.className == '') {
         return;
     }
     if (clickedCard !== undefined && clickedCard !== null) {
@@ -161,6 +161,8 @@ document.body.addEventListener('mouseup', e => {
             }
         }
         const table = document.querySelector('#table');
+        
+        
         for (let i = 0; i < 7; i++) {
             let rect = table.children[i].childElementCount != 0 ? table.children[i].lastChild.getClientRects()[0] : table.children[i].getClientRects()[0];
             if (e.clientX >= rect.x && e.clientX <= rect.x + 90 && e.clientY >= rect.y && e.clientY <= rect.y + 130) {
@@ -176,7 +178,11 @@ document.body.addEventListener('mouseup', e => {
                         break;
                     }
                 }
-
+                if(table.children[i].childElementCount == 0){
+                    if(Number(clickedCard.dataset['number']) != 13){
+                        break;
+                    }
+                }
                 if (clickedCard != clickedCard.parentNode.lastChild) {
                     let arr = [];
                     for (let k = Number(clickedCard.dataset['location']); k <= Number(clickedCard.parentNode.lastChild.dataset['location']); k++) {
