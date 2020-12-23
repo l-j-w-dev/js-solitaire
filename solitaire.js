@@ -84,6 +84,7 @@ const organize = a => {
         if (a[i].dataset['front'] !== 'true') {
             flip(a[i], false);
         }
+        a[i].style.left = '-3px';
         a[i].style.top = -2 + (20 * i) + 'px';
         a[i].dataset['top'] = 'false';
         a[i].dataset['location'] = i;
@@ -156,7 +157,6 @@ document.body.addEventListener('mouseup', e => {
                     }
                 }
             }
-
         }
         const table = document.querySelector('#table');
         for (let i = 0; i < 7; i++) {
@@ -181,9 +181,9 @@ document.body.addEventListener('mouseup', e => {
                         arr.push(clickedCard.parentNode.children[k]);
                     }
                     for (let k = 0; k < arr.length; k++) {
+                        table.children[i].appendChild(arr[k]);
                         arr[k].style.left = '-2.5px';
                         arr[k].style.top = sY + (k * 20) + 'px';
-                        table.children[i].appendChild(arr[k]);
                     }
                 } else {
                     table.children[i].appendChild(e.target);
@@ -194,7 +194,7 @@ document.body.addEventListener('mouseup', e => {
                 return;
             }
         }
-        clickedCard.style.left = '-2.5px';
+        clickedCard.style.left = '-3px';
         clickedCard.style.top = sY + 'px';
 
         if (clickedCard != clickedCard.parentNode.lastChild) {
@@ -202,7 +202,6 @@ document.body.addEventListener('mouseup', e => {
                 clickedCard.parentNode.children[i].style.left = '-2.5px';
             }
             organize(Number(clickedCard.parentNode.dataset['index']));
-
         }
     }
 
