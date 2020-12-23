@@ -172,6 +172,9 @@ img{
     left:-1px;
     z-index:2;
 }
+.card:active{
+    z-index: 50;
+}
 /*
 .card:hover .front{
     z-index:1;

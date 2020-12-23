@@ -109,6 +109,7 @@ const addMove = _ =>{
     }
     if(sorted == 52){
         alert("끝!!!!!!");
+        return;
     }
 }
 document.body.addEventListener('mousedown', e => {
@@ -225,14 +226,11 @@ document.body.addEventListener('mousemove', e => {
     }
 })
 
-document.querySelector('#solitaire #playBoard').addEventListener('mouseout', e => {
-    if (clickedCard !== null && mouseDown === true) {
-        clickedCard.style.left = sX + 'px';
-        clickedCard.style.top = sY + 'px';
-        mouseDown = false;
-    }
+document.body.addEventListener('mouseleave', e=>{
+    clickedCard.style.left = sX + 'px';
+    clickedCard.style.top = sY + 'px';
+    mouseDown = false;
 })
-
 
 document.querySelector('.queueBack').addEventListener('mouseup', e => {
     const target = e.target;
