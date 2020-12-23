@@ -115,12 +115,11 @@ const addMove = _ => {
 }
 document.body.addEventListener('mousedown', e => {
     if (e.target.parentNode.className != 'empty col') {
-        if (e.target != e.target.parentNode.lastChild && e.target.parentNode.className == 'solitaire') {
+        if (e.target != e.target.parentNode.lastChild) {
             return;
         }
     }
     mouseDown = true;
-
     if (e.target.className === 'card' && e.target.dataset['front'] == 'true') {
         tempEvent = e;
         startX = e.clientX;
@@ -136,7 +135,10 @@ document.body.addEventListener('mousedown', e => {
 document.body.addEventListener('mouseup', e => {
     mouseDown = false;
     tempEvent = null;
-    if (clickedCard !== null) {
+    if(e.target.className == ''){
+        return;
+    }
+    if (clickedCard !== undefined && clickedCard !== null) {
         const sorts = document.querySelectorAll('.empty.sort');
         if (e.clientX >= sorts[0].getBoundingClientRect().x && e.clientX <= sorts[3].getBoundingClientRect().x + 91 &&
             e.clientY >= sorts[0].getBoundingClientRect().y && e.clientY <= sorts[0].getBoundingClientRect().y + 134) {
@@ -182,7 +184,7 @@ document.body.addEventListener('mouseup', e => {
                     }
                     for (let k = 0; k < arr.length; k++) {
                         table.children[i].appendChild(arr[k]);
-                        arr[k].style.left = '-2.5px';
+                        arr[k].style.left = '3px';
                         arr[k].style.top = sY + (k * 20) + 'px';
                     }
                 } else {
@@ -203,6 +205,7 @@ document.body.addEventListener('mouseup', e => {
             }
             organize(Number(clickedCard.parentNode.dataset['index']));
         }
+        clickedCard = null;
     }
 
 })
