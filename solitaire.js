@@ -1,0 +1,151 @@
+const cards = new Image();
+cards.src = 'cards.png';
+
+
+const init = _ => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 91;
+    canvas.height = 136;
+    let card = '';
+    let arr = [];
+    for(let i = 0; i < 13; i++){
+        ctx.drawImage(cards, 9 + (98*i) + -0.2*i, 8, 89, 134, 1, 0, 89, 134);
+        card = `<div class='card' data-dragable='true' data-number='${(i+1)}' data-color='red' data-shape='heart' data-front='false'>
+        <img class='front' src='${canvas.toDataURL()}'>
+        <img class='back' src='back.jpg'>
+        </div>`;
+        arr.push(card);
+    }
+    for(let i = 0; i < 13; i++){
+        ctx.drawImage(cards, 9 + (98*i) + -0.2*i, 152, 89, 134, 1, 0, 89, 134);
+        card = `<div class='card' data-dragable='true' data-number='${(i+1)}' data-color='red' data-shape='dia' data-front='false'>        
+        <img class='front' src='${canvas.toDataURL()}'>
+        <img class='back' src='back.jpg'>
+        </div>`;
+        arr.push(card);
+    }
+    for(let i = 0; i < 13; i++){
+        ctx.drawImage(cards, 9 + (98*i) + -0.2*i, 295, 89, 134, 1, 0, 89, 134);
+        card = `<div class='card' data-dragable='true' data-number='${(i+1)}' data-color='black' data-shape='club' data-front='false'>        
+        <img class='front' src='${canvas.toDataURL()}'>
+        <img class='back' src='back.jpg'>
+        </div>`;arr.push(card);
+    }
+    for(let i = 0; i < 13; i++){
+        ctx.drawImage(cards, 9 + (98*i) + -0.2*i, 438, 89, 134, 1, 0, 89, 134);
+        card = `<div class='card' data-dragable='true' data-number='${(i+1)}' data-color='black' data-shape='spade' data-front='false'>        
+        <img class='front' src='${canvas.toDataURL()}'>
+        <img class='back' src='back.jpg'>
+        </div>`;
+        arr.push(card);
+    }
+    arr.sort(_=>{return Math.random() - Math.random()});
+    for(let i = 28; i < arr.length; i++){
+        document.querySelector('.empty.queueBack').innerHTML += arr[i];
+    }
+    
+    document.querySelector('#solitaire #table').children[0].innerHTML += arr[0];
+    document.querySelector('#solitaire #table').children[1].innerHTML += arr[1];
+    document.querySelector('#solitaire #table').children[1].innerHTML += arr[2];
+    document.querySelector('#solitaire #table').children[2].innerHTML += arr[3];
+    document.querySelector('#solitaire #table').children[2].innerHTML += arr[4];
+    document.querySelector('#solitaire #table').children[2].innerHTML += arr[5];
+    for(let i = 6; i < 10; i++){
+        document.querySelector('#solitaire #table').children[3].innerHTML += arr[i];
+    }
+    for(let i = 10; i < 15; i++){
+        document.querySelector('#solitaire #table').children[4].innerHTML += arr[i];
+    }
+    for(let i = 15; i < 21; i++){
+        document.querySelector('#solitaire #table').children[5].innerHTML += arr[i];
+    }
+    for(let i = 21; i < 28; i++){
+        document.querySelector('#solitaire #table').children[6].innerHTML += arr[i];
+    }
+    for(let i = 0; i < 7; i++){
+        organize(i);
+    }
+}
+
+const flip = (target, front) => {
+    target.dataset['front'] = front ? 'true' : 'false';
+    target.children[1].style.zIndex = front ? 1 : 2;
+    target.children[0].style.zIndex = front ? 2 : 1;
+}
+
+const organize = a =>{
+    a = document.querySelectorAll('#solitaire #table .empty')[a].children;
+    for(let i = 0; i < a.length; i++){
+        a[i].style.top = -2 + (20 * i)+'px';
+        flip(a[i], false);
+        if(i === a.length - 1){
+            flip(a[i], true)
+        }
+    }
+}
+
+let clickedCard;
+let mouseDown = false;
+let startX, startY;
+let sX, sY;
+let tempEvent;
+
+document.body.addEventListener('mousedown', e=>{
+    mouseDown = true;
+    if(e.target.className === 'card' && e.target.dataset['front'] == 'true'){
+        tempEvent = e;
+        startX = e.clientX;
+        startY = e.clientY;
+        clickedCard = e.target;
+        sX = clickedCard.offsetLeft;
+        sY = clickedCard.offsetTop;
+    }else{
+        clickedCard = null;
+    }
+})
+
+document.body.addEventListener('mouseup', e=>{
+    mouseDown = false;
+    tempEvent = null;
+    if(clickedCard !== null){
+        clickedCard.style.left = '-2.5px';
+        clickedCard.style.top = sY+ 'px';
+    }
+})
+
+document.body.addEventListener('mousemove', e=>{
+    if(mouseDown && clickedCard != null){
+        clickedCard.style.left = (e.clientX - startX + 'px');
+        clickedCard.style.top = (e.clientY - startY+ sY + 'px');
+    }
+})
+
+document.querySelector('#solitaire #playBoard').addEventListener('mouseout', e=>{
+    if(clickedCard !== null && mouseDown === true){        
+        clickedCard.style.left = sX + 'px';
+        clickedCard.style.top = sY+ 'px';
+        mouseDown = false;
+    }    
+})
+
+document.querySelector('.queueBack').addEventListener('mousedown', e=>{
+    const target = e.target;
+    if(document.querySelector('.queueBack').children.length == 0){
+        const queueFront = document.querySelectorAll('.queueFront .card');
+        for(let i = queueFront.length - 1; i >= 0; i--){
+            document.querySelector('.queueBack').appendChild(queueFront[i]);
+            flip(queueFront[i], false);
+        }
+        return;
+    }
+    target.style.left = '-3px';
+    document.querySelector('.queueFront').appendChild(target);
+    flip(target, true);
+})
+
+
+
+window.onload = _ =>{
+    init();
+}
