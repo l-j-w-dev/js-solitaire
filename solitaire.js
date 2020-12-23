@@ -75,11 +75,17 @@ const flip = (target, front) => {
 }
 
 const organize = a =>{
+    if(document.querySelectorAll('#solitaire #table .empty')[a] == undefined) return;
     a = document.querySelectorAll('#solitaire #table .empty')[a].children;
     for(let i = 0; i < a.length; i++){
+        if(a[i].dataset['front'] !== 'true'){
+            flip(a[i], false);
+        }
         a[i].style.top = -2 + (20 * i)+'px';
-        flip(a[i], false);
+        a[i].dataset['top'] = 'false';
+        a[i].dataset['location'] = i;
         if(i === a.length - 1){
+            a[i].dataset['top'] = 'true';
             flip(a[i], true)
         }
     }
@@ -109,15 +115,71 @@ document.body.addEventListener('mouseup', e=>{
     mouseDown = false;
     tempEvent = null;
     if(clickedCard !== null){
+        const table = document.querySelector('#table');
+        for(let i = 0; i < 7; i++){
+            let rect = table.children[i].childElementCount != 0 ? table.children[i].lastChild.getClientRects()[0] : table.children[i].getClientRects()[0];
+            if(e.clientX >= rect.x && e.clientX <= rect.x + 90 && e.clientY >= rect.y && e.clientY <= rect.y + 130){
+                let index = Number(e.target.parentNode.dataset['index']);
+                if(i == index){
+                    continue;
+                }
+                if(table.children[i].childElementCount != 0){
+                    if((Number(table.children[i].lastChild.dataset['number']) - 1) != e.target.dataset['number']){
+                        break;
+                    }
+                    if(table.children[i].lastChild.dataset['color'] == e.target.dataset['color']){
+                        break;
+                    }
+                }
+                clickedCard.style.left = '-2.5px';
+                clickedCard.style.top = sY+ 'px';
+                
+                if(clickedCard != clickedCard.parentNode.lastChild){
+                    let arr = [];
+                    for(let k = Number(clickedCard.dataset['location']); k <= Number(clickedCard.parentNode.lastChild.dataset['location']); k++){
+                        arr.push(clickedCard.parentNode.children[k]);
+                    }
+                    for(let k = 0; k < arr.length; k++){
+                        arr[k].style.left = '-2.5px';
+                        arr[k].style.top = sY+ (k*20)+'px';
+                        table.children[i].appendChild(arr[k]);
+                    }
+                }else{
+                    table.children[i].appendChild(e.target);
+                }
+                organize(index);
+                organize(i);
+                return;
+            }
+        }
+
         clickedCard.style.left = '-2.5px';
         clickedCard.style.top = sY+ 'px';
+        if(clickedCard != clickedCard.parentNode.lastChild){
+            for(let i = Number(clickedCard.dataset['location']); i < clickedCard.parentNode.children.length; i++){
+                clickedCard.parentNode.children[i].style.left = '-2.5px';
+            }
+            organize(Number(clickedCard.parentNode.dataset['index']));
+        }
     }
+    
 })
 
 document.body.addEventListener('mousemove', e=>{
     if(mouseDown && clickedCard != null){
         clickedCard.style.left = (e.clientX - startX + 'px');
         clickedCard.style.top = (e.clientY - startY+ sY + 'px');
+        for(let i = 0; i < clickedCard.parentNode.children.length; i++){
+            if(clickedCard == clickedCard.parentNode.children[i]){
+                let temp = 0;
+                for(let k = i+1; k < clickedCard.parentNode.children.length; k++){
+                    temp++;
+                    clickedCard.parentNode.children[k].style.left =  (e.clientX - startX + 'px');
+                    clickedCard.parentNode.children[k].style.top = (e.clientY - startY+ sY + (20*temp) +'px');
+                }
+                break;
+            }
+        }
     }
 })
 
@@ -126,10 +188,10 @@ document.querySelector('#solitaire #playBoard').addEventListener('mouseout', e=>
         clickedCard.style.left = sX + 'px';
         clickedCard.style.top = sY+ 'px';
         mouseDown = false;
-    }    
+    }
 })
 
-document.querySelector('.queueBack').addEventListener('mousedown', e=>{
+document.querySelector('.queueBack').addEventListener('mouseup', e=>{
     const target = e.target;
     if(document.querySelector('.queueBack').children.length == 0){
         const queueFront = document.querySelectorAll('.queueFront .card');
