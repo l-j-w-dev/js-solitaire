@@ -64,7 +64,7 @@ img{
     top:50px;
     left:50%;
     transform:translateX(-50%);
-    pointer-events:visible;
+    pointer-events:none;
 }
 
 #sort{
@@ -82,7 +82,6 @@ img{
     text-align: center;
     font-size: 35px;
     color : #009999;
-    pointer-events: none;
     font-weight: bold;
 }
 
@@ -101,6 +100,13 @@ img{
 .empty[data-space=spade]{
     right:353px;
     top:30px;
+}
+.empty.sort div{
+    left:0;
+    top:0;
+}
+.empty.sort #text{
+    position: absolute;
 }
 .queueBack{
     cursor:pointer;    
