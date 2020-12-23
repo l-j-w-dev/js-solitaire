@@ -109,6 +109,7 @@ img{
     top:30px;
 }
 .empty.sort div{
+    position: absolute;
     left:0;
     top:0;
 }
@@ -165,6 +166,7 @@ img{
     top:0;
     position: absolute;
 }
+
 .card .front{
     z-index:1;
 }

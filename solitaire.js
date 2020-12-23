@@ -100,21 +100,21 @@ let startX, startY;
 let sX, sY;
 let tempEvent;
 let moves = 0;
-const addMove = _ =>{
+const addMove = _ => {
     moves++;
     document.querySelector('#move').innerHTML = 'Moves : ' + moves;
     let sorted = 0;
-    for(let i = 0; i < 4; i++){
+    for (let i = 0; i < 4; i++) {
         sorted += document.querySelector('#sort').children[i].childElementCount;
     }
-    if(sorted == 52){
+    if (sorted == 52) {
         alert("끝!!!!!!");
         return;
     }
 }
 document.body.addEventListener('mousedown', e => {
-    if(e.target.parentNode.className != 'empty col'){
-        if(e.target != e.target.parentNode.lastChild && e.target.parentNode.className == 'solitaire'){
+    if (e.target.parentNode.className != 'empty col') {
+        if (e.target != e.target.parentNode.lastChild && e.target.parentNode.className == 'solitaire') {
             return;
         }
     }
@@ -146,15 +146,17 @@ document.body.addEventListener('mouseup', e => {
                 if (e.clientX >= rect.x && e.clientX <= rect.x + 91 && e.clientY >= rect.y && e.clientY <= rect.y + 134) {
                     const number = Number(clickedCard.dataset['number']);
                     const shape = clickedCard.dataset['shape'];
-                    if(number-1 == sorts[i].childElementCount && sorts[i].dataset['space'] == shape){
+                    if (number - 1 == sorts[i].childElementCount && sorts[i].dataset['space'] == shape) {
                         sorts[i].appendChild(clickedCard);
+                        clickedCard.style.left = '-3px'
+                        clickedCard.style.top = '-3px'
                         organize(tempParent.dataset['index']);
                         addMove();
                         return;
                     }
                 }
             }
-            
+
         }
         const table = document.querySelector('#table');
         for (let i = 0; i < 7; i++) {
@@ -172,8 +174,6 @@ document.body.addEventListener('mouseup', e => {
                         break;
                     }
                 }
-                clickedCard.style.left = '-2.5px';
-                clickedCard.style.top = sY + 'px';
 
                 if (clickedCard != clickedCard.parentNode.lastChild) {
                     let arr = [];
@@ -202,7 +202,7 @@ document.body.addEventListener('mouseup', e => {
                 clickedCard.parentNode.children[i].style.left = '-2.5px';
             }
             organize(Number(clickedCard.parentNode.dataset['index']));
-            
+
         }
     }
 
@@ -226,16 +226,18 @@ document.body.addEventListener('mousemove', e => {
     }
 })
 
-document.body.addEventListener('mouseleave', e=>{
-    clickedCard.style.left = sX + 'px';
-    clickedCard.style.top = sY + 'px';
-    mouseDown = false;
+document.body.addEventListener('mouseleave', e => {
+    if (clickedCard !== null && mouseDown === true) {
+        clickedCard.style.left = sX + 'px';
+        clickedCard.style.top = sY + 'px';
+        mouseDown = false;
+    }
 })
 
 document.querySelector('.queueBack').addEventListener('mouseup', e => {
     const target = e.target;
     if (document.querySelector('.queueBack').children.length == 0) {
-        if(document.querySelector('.queueFront').children.length == 0){
+        if (document.querySelector('.queueFront').children.length == 0) {
             return;
         }
         const queueFront = document.querySelectorAll('.queueFront .card');
