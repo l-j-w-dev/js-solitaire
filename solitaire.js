@@ -112,8 +112,8 @@ const addMove = _ =>{
     }
 }
 document.body.addEventListener('mousedown', e => {
-    if(e.target.parentNode != document.querySelector('#table')){
-        if(e.target != e.target.parentNode.lastChild && e.target.id != 'solitaire'){
+    if(e.target.parentNode.className != 'empty col'){
+        if(e.target != e.target.parentNode.lastChild && e.target.parentNode.className == 'solitaire'){
             return;
         }
     }
@@ -146,8 +146,6 @@ document.body.addEventListener('mouseup', e => {
                     const number = Number(clickedCard.dataset['number']);
                     const shape = clickedCard.dataset['shape'];
                     if(number-1 == sorts[i].childElementCount && sorts[i].dataset['space'] == shape){
-                        clickedCard.style.left = '-2px';
-                        clickedCard.style.top = '-2px';
                         sorts[i].appendChild(clickedCard);
                         organize(tempParent.dataset['index']);
                         addMove();
@@ -203,7 +201,7 @@ document.body.addEventListener('mouseup', e => {
                 clickedCard.parentNode.children[i].style.left = '-2.5px';
             }
             organize(Number(clickedCard.parentNode.dataset['index']));
-            addMove();
+            
         }
     }
 
