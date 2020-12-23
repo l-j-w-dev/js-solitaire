@@ -103,10 +103,17 @@ let moves = 0;
 const addMove = _ =>{
     moves++;
     document.querySelector('#move').innerHTML = 'Moves : ' + moves;
+    let sorted = 0;
+    for(let i = 0; i < 4; i++){
+        sorted += document.querySelector('#sort').children[i].childElementCount;
+    }
+    if(sorted == 52){
+        alert("끝!!!!!!");
+    }
 }
 document.body.addEventListener('mousedown', e => {
     if(e.target.parentNode != document.querySelector('#table')){
-        if(e.target != e.target.parentNode.lastChild){
+        if(e.target != e.target.parentNode.lastChild && e.target.id != 'solitaire'){
             return;
         }
     }
@@ -188,9 +195,9 @@ document.body.addEventListener('mouseup', e => {
                 return;
             }
         }
-
         clickedCard.style.left = '-2.5px';
         clickedCard.style.top = sY + 'px';
+
         if (clickedCard != clickedCard.parentNode.lastChild) {
             for (let i = Number(clickedCard.dataset['location']); i < clickedCard.parentNode.children.length; i++) {
                 clickedCard.parentNode.children[i].style.left = '-2.5px';
