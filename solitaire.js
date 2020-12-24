@@ -136,6 +136,7 @@ document.body.addEventListener('mouseup', e => {
     mouseDown = false;
     tempEvent = null;
     if (e.target.className == '') {
+        clickedCard = null;
         return;
     }
     if (clickedCard !== undefined && clickedCard !== null) {
@@ -155,6 +156,7 @@ document.body.addEventListener('mouseup', e => {
                         clickedCard.style.top = '-3px'
                         organize(tempParent.dataset['index']);
                         addMove();
+                        clickedCard = null;
                         return;
                     }
                 }
@@ -199,6 +201,7 @@ document.body.addEventListener('mouseup', e => {
                 organize(index);
                 organize(i);
                 addMove();
+                clickedCard = null;
                 return;
             }
         }
@@ -210,10 +213,10 @@ document.body.addEventListener('mouseup', e => {
                 clickedCard.parentNode.children[i].style.left = '-2.5px';
             }
             organize(Number(clickedCard.parentNode.dataset['index']));
+            
         }
         clickedCard = null;
     }
-
 })
 
 document.body.addEventListener('mousemove', e => {
